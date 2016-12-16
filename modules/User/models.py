@@ -33,7 +33,6 @@ class User(AbstractBaseUser, PermissionsMixin, models.Model):
     id_facebook = models.CharField(max_length=100,default="")
     username = models.CharField(max_length=50,default="")
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=20,default="")
     objects = UserManager()
 
     is_active = models.BooleanField(default=True)
