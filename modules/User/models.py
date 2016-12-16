@@ -31,15 +31,15 @@ class User(AbstractBaseUser, PermissionsMixin, models.Model):
 
     id_user = models.AutoField(primary_key=True)
     id_facebook = models.CharField(max_length=100,default="")
-    username = models.CharField(max_length=50,default="")
+    username = models.CharField(unique=True,max_length=50,default="")
     email = models.EmailField(unique=True)
     objects = UserManager()
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email',]
 
 
     def get_short_name(self):
