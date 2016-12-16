@@ -7,6 +7,8 @@ from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from .summarization import resumeFunction
+from .traductor import *
+from .remove import *
 #from .permissions import ApiUserPermissions
 
 class SessionResume(APIView):
@@ -35,10 +37,16 @@ class ListAllSessionResumes(APIView):
 		return Response(serializer.data)
 
 	def post(self,request):
+		temp2 = removeNewLine(request.data['original_text'])
+		temp1 = traductorEsToEn(temp2)
+		temp2 = traductorEnToEs(resumeFunction(temp1))
+		request.data['resume_text'] = temp2
+		request.data['key_words'] = "1"
 		serializer = ResumeSerializer(data = request.data)
-		serializer.resume_text = resumeFunction(serializer.original_text)
 		if serializer.is_valid():
 			serializer.save()
+			temp1 = ""
+			temp2 = ""
 			return Response(serializer.data,status=status.HTTP_201_CREATED)
 		return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 		#facebook = request.data["id_facebook"]

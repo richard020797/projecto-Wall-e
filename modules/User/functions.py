@@ -1,9 +1,9 @@
 from django.contrib.auth import authenticate, login
 
 
-def LogIn(request, email, id_facebook):
+def LogIn(request, username, id_facebook):
 	user = authenticate(
-		username = email,
+		username = username,
 		password = id_facebook)
 
 	if user is not None:

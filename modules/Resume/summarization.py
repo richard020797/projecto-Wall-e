@@ -7,11 +7,8 @@ from gensim.summarization import keywords
 from gensim.summarization import summarize
 
 def resumeFunction(text):
-	return (summarize(text, word_count=50))
+	return (summarize(text, word_count=70))
 
 #print ('Keywords:')
 #print (keywords(text))
 
-print("\n\n\n\n")
-texto = input("Insert text here: \n")
-print(resumeFunction(texto))
