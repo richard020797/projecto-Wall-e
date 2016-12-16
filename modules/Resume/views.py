@@ -9,34 +9,35 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from .summarization import resumeFunction
 #from .permissions import ApiUserPermissions
 
-class UserStudySession(APIView):
+class SessionResume(APIView):
 
 	#permission_classes = (IsAuthenticated,)
 	#authentication_classes = (JSONWebTokenAuthentication,)
 
 	def get_object(self,pk):
 		try:
-			return Session.objects.get(pk=pk)
-		except Session.DoesNotExist:
+			return Resume.objects.get(pk=pk)
+		except Resume.DoesNotExist:
 			raise Http404
 
 	def get(self,request,pk,format=None):
-		session = self.get_object(pk)
-		serializer = SessionSerializer(session)
+		resume = self.get_object(pk)
+		serializer = ResumeSerializer(resume)
 		return Response(serializer.data)
 
-class ListAllStudySessions(APIView):
+class ListAllSessionResumes(APIView):
 	#permission_classes = (ApiUserPermissions,)
 	#authentication_classes = (JSONWebTokenAuthentication,)
 
 	def get(self,request):
-		sessions = Session.objects.all()
-		serializer = SessionSerializer(sessions, many=True)
+		resume = Resume.objects.all()
+		serializer = ResumeSerializer(resume, many=True)
 		return Response(serializer.data)
 
 	def post(self,request):
-		serializer = SessionSerializer(data = request.data)
+		serializer = ResumeSerializer(data = request.data)
+		serializer.resume_text = resumeFunction(serializer.original_text)
 		if serializer.is_valid():
 			serializer.save()
-			return Response(status=status.HTTP_201_CREATED)
+			return Response(serializer.data,status=status.HTTP_201_CREATED)
 		return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
