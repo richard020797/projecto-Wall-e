@@ -37,8 +37,7 @@ class ListAllSessionResumes(APIView):
 		return Response(serializer.data)
 
 	def post(self,request):
-		temp2 = removeNewLine(request.data['original_text'])
-		temp1 = traductorEsToEn(temp2)
+		temp1 = traductorEsToEn(request.data['original_text'])
 		temp2 = traductorEnToEs(resumeFunction(temp1))
 		request.data['resume_text'] = temp2
 		request.data['key_words'] = "1"
